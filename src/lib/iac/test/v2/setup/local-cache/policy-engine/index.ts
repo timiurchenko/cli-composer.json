@@ -1,18 +1,23 @@
 import * as createDebugLogger from 'debug';
 
 import { CustomError } from '../../../../../../errors';
-import { TestConfig } from '../../../types';
 import { lookupLocalPolicyEngine } from './lookup-local';
 
 const debugLogger = createDebugLogger('snyk-iac');
 
-export async function initPolicyEngine(testConfig: TestConfig) {
+export async function initPolicyEngine(
+  iacCachePath: string,
+  userPolicyEnginePath: string | undefined,
+) {
   debugLogger('Looking for Policy Engine locally');
-  const localPolicyEnginePath = await lookupLocalPolicyEngine(testConfig);
+  const localPolicyEnginePath = await lookupLocalPolicyEngine(
+    iacCachePath,
+    userPolicyEnginePath,
+  );
 
   if (!localPolicyEnginePath) {
     debugLogger(
-      `Downloading the Policy Engine and saving it at ${testConfig.iacCachePath}`,
+      `Downloading the Policy Engine and saving it at ${iacCachePath}`,
     );
     // TODO: Download Policy Engine executable
   }
